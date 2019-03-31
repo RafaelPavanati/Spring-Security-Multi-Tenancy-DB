@@ -1,8 +1,7 @@
 package com.cicloi.eletronica.security;
 
 
-import com.cicloi.eletronica.tenant.TenantLocalStorage;
-import org.apache.commons.lang3.StringUtils;
+import com.cicloi.eletronica.multitenant.TenantContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,19 +33,17 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
         String username = null;
 
-
         if (requestHeader != null
                 && requestHeader.startsWith("Bearer ")) {
             String authToken = requestHeader.substring(7);
             username = jwtTokenService.getUsernameFromToken(authToken);
             token = authToken;
         }
+
         String tenantId = request.getHeader("tenantId");
-        if(StringUtils.isEmpty(tenantId)) {
-            TenantLocalStorage.setTenantName("db1");
-        } else {
-            TenantLocalStorage.setTenantName(tenantId);
-        }
+
+        TenantContext.setCurrentTenant(tenantId);
+
         if (username != null
                 && SecurityContextHolder
                 .getContext()
@@ -68,5 +65,4 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
 }

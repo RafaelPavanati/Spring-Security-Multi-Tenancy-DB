@@ -1,6 +1,5 @@
 package com.cicloi.eletronica.models;
 
-import com.cicloi.eletronica.models.embeddable.Contexto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,19 +11,19 @@ import java.util.Collection;
 @Entity
 @Table(name = "usuarios")
 @SequenceGenerator(name = "usuarios_seq", sequenceName = "usuarios_seq", allocationSize = 1)
-//@JsonIgnoreProperties({"id","regras","username","password", "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
-public class Usuario  implements UserDetails {
+public class Usuario implements UserDetails {
 
     @Id
     @Column(name = "id_usuario")
     @GeneratedValue(generator = "usuarios_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     private String nome;
 
+    @Column(name = "tenant", nullable = false, unique = true)
     private String tenant;
 
     @JsonIgnore
@@ -122,6 +121,7 @@ public class Usuario  implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     public String getTenant() {
         return tenant;
     }

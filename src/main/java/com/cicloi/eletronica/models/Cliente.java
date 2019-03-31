@@ -1,16 +1,16 @@
 package com.cicloi.eletronica.models;
 
-import com.cicloi.eletronica.models.embeddable.Contexto;
 import com.cicloi.eletronica.models.embeddable.Endereco;
+import com.cicloi.eletronica.multitenant.AbstractEntityImpl;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "clientes")
+@Table(name = "vw_clientes")
 @SequenceGenerator(name = "clientes_seq", sequenceName = "clientes_seq", allocationSize = 1)
-public class Cliente extends Contexto {
+public class Cliente extends AbstractEntityImpl {
 
     @Id
     @Column(name = "ID_USUARIO")
